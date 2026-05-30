@@ -7,8 +7,8 @@ export default function CustomCursor() {
   const [hoverText, setHoverText] = useState("");
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
-  const smoothX = useSpring(cursorX, { stiffness: 300, damping: 28 });
-  const smoothY = useSpring(cursorY, { stiffness: 300, damping: 28 });
+  const smoothX = useSpring(cursorX, { stiffness: 500, damping: 28 });
+  const smoothY = useSpring(cursorY, { stiffness: 500, damping: 28 });
 
   useEffect(() => {
     if (window.matchMedia("(pointer: coarse)").matches) return undefined;
