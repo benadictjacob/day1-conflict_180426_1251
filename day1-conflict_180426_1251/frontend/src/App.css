@@ -1,0 +1,5 @@
+/* App-level styles - minimal, most styling handled by Tailwind */
+.App {
+  position: relative;
+  min-height: 100vh;
+}
