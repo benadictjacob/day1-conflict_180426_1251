@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { WordReveal, FadeUp, LineReveal } from "../AnimatedText";
 
-const IMG_FOREST = "https://images.unsplash.com/photo-1675371788315-60fa0ef48267?w=900&q=80&auto=format";
+const IMG_FOREST = "https://images.unsplash.com/photo-1503435980610-a51f3ddfee50?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGdyZWVuJTIwZm9yZXN0fGVufDB8fDB8fHww";
 
 export default function Story() {
   const sectionRef = useRef(null);
@@ -17,25 +17,25 @@ export default function Story() {
       <div className="flex-1 p-10 md:p-16 lg:p-24 flex flex-col justify-center order-2 md:order-1">
         <div className="max-w-2xl ml-auto">
           <LineReveal>
-            <span className="font-display text-[10px] tracking-[0.3em] font-semibold uppercase mb-12 block text-primary">
-              From Problem to Purpose
-            </span>
+            <span className="font-display text-2xl md:text-3xl font-bold mb-12 block text-primary">
+  From Problem to Purpose
+</span>
           </LineReveal>
           <div className="space-y-7">
             <WordReveal
-              text="ReVearth wasn't born in a boardroom; it was born from the lived experiences of four individuals who refused to look the other way."
+              text="ReVearth wasn't conceived in a boardroom it was built by four individuals who refused to ignore a growing challenge."
               className="text-base md:text-lg font-light leading-relaxed text-foreground/75"
               delay={0.1}
               as="p"
             />
             <WordReveal
-              text="We are four founders coming from vastly different professional backgrounds, but we shared one common frustration: the mounting waste crisis we encountered in our day-to-day lives."
+              text="Coming from diverse professional backgrounds, our founding team united over a shared frustration: the escalating waste crisis and the systemic inefficiencies we witnessed every day."
               className="text-base md:text-lg font-light leading-relaxed text-foreground/75"
               delay={0.15}
               as="p"
             />
             <WordReveal
-              text="Whether it was the pollution in our neighbourhoods or the inefficiency of current systems, we realized that the world didn't need another waste management company. It needed a bold idea."
+              text="Whether looking at local pollution or outdated disposal methods, we recognized that the world didn't need just another waste management company. It required a bold, fundamentally new approach to resource recovery."
               className="text-base md:text-lg font-light leading-relaxed text-foreground/75"
               delay={0.2}
               as="p"

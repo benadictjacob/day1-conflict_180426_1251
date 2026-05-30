@@ -19,7 +19,7 @@ export default function VisionMission() {
         <div className="relative z-10 max-w-xl mx-auto md:mx-0">
           <FadeUp><span className="font-display text-[10px] tracking-[0.3em] font-semibold uppercase mb-10 block opacity-50">Vision</span></FadeUp>
           <WordReveal
-            text="To become the heartbeat of environmental restoration - pioneering a future where the Earth is fully revived, and every community lives in harmony with a clean, waste-free ecosystem."
+            text="To be the heartbeat of Earth's restoration, inspiring waste-free communities living in perfect harmony with nature."
             className="text-xl md:text-2xl lg:text-3xl font-light leading-relaxed opacity-90"
             delay={0.1}
             as="p"
