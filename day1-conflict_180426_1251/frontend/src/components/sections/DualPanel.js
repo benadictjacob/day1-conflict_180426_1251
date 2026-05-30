@@ -27,7 +27,7 @@ export default function DualPanel() {
         />
         <div className="relative z-10 max-w-xl mx-auto md:mx-0">
           <LineReveal>
-            <span className="font-display text-[10px] tracking-[0.3em] font-semibold uppercase mb-10 block opacity-60">
+            <span className="font-display text-[25px] tracking-[0.3em] font-semibold uppercase mb-10 block opacity-60">
               Products & Solutions
             </span>
           </LineReveal>
@@ -38,12 +38,12 @@ export default function DualPanel() {
             as="h2"
           />
           <WordReveal
-            text="Stay tuned for the latest update to know about products like that, something that will create eagerness to the people viewing website."
+            text="Engineering smart solutions that elevate discarded materials into valuable resources."
             className="text-base md:text-lg font-light leading-relaxed mb-14 opacity-80"
             delay={0.2}
             as="p"
           />
-          <FadeUp delay={0.4}>
+          {/* <FadeUp delay={0.4}>
             <button
               data-testid="learn-more-solutions"
               className="group flex items-center font-display text-xs tracking-[0.2em] uppercase font-semibold hover:opacity-70 transition-opacity"
@@ -55,7 +55,7 @@ export default function DualPanel() {
                 </svg>
               </span>
             </button>
-          </FadeUp>
+          </FadeUp> */}
         </div>
       </div>
       <div className="flex-1 relative overflow-hidden min-h-[50vh] md:min-h-0">

@@ -33,10 +33,10 @@ export default function Footer() {
               </div>
               <div className="flex flex-col space-y-4">
                 <span className="font-display text-[10px] tracking-[0.3em] uppercase font-semibold text-foreground/30 mb-2">Connect</span>
-                <a href="mailto:hello@revearth.com" className="text-sm font-light hover:text-primary transition-colors duration-300">
-                  hello@revearth.com
+                <a href="mailto:teamrevearth@gmail.com" className="text-sm font-light hover:text-primary transition-colors duration-300">
+                  teamrevearth@gmail.com
                 </a>
-                <a href="tel:+10000000000" className="text-sm font-light hover:text-primary transition-colors duration-300">
+                {/* <a href="tel:+10000000000" className="text-sm font-light hover:text-primary transition-colors duration-300">
                   +1 (000) 000-0000
                 </a>
                 <div className="flex gap-5 pt-3">
@@ -49,7 +49,7 @@ export default function Footer() {
                       {label}
                     </a>
                   ))}
-                </div>
+                </div> */}
               </div>
             </nav>
           </FadeUp>

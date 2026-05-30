@@ -7,9 +7,9 @@ const IMG_2 = "https://images.unsplash.com/photo-1769501378399-bbea7f5cfc94?w=60
 const IMG_3 = "/assets/community-gardening.jpg";
 
 const items = [
-  { title: "Diverse Waste Solutions", image: IMG_1, description: "Tailored system for waste. We don't just process; we optimize for maximum material recovery." },
-  { title: "Resource Recovery", image: IMG_2, description: "Pioneering technology that redefines waste, converting tomorrow's environmental liabilities into today's high-value energy assets." },
-  { title: "Generational Impact", image: IMG_3, description: "Every process we design is measured by the world it leaves behind for the next generation. Long-term thinking is built in." }
+  { title: "Diverse Waste Solutions", image: IMG_1, description: " Tailored system for waste. We don't just process; we optimize for maximum material recovery." },
+  { title: "Resource Recovery", image: IMG_2, description: " Pioneering technology that redefines waste, converting tomorrow's environmental liabilities into today's high-value energy assets." },
+  { title: "Generational Impact", image: IMG_3, description: "To become the heartbeat of environmental restoration - pioneering a future where the Earth is fully revived, and every community lives in harmony with a clean, waste-free ecosystem" }
 ];
 
 function WhatWeDoCard({ item, index }) {
@@ -33,7 +33,7 @@ function WhatWeDoCard({ item, index }) {
           <img
             src={item.image}
             alt={item.title}
-            className="w-full h-full object-cover transition-transform ease-out group-hover:scale-105"
+            className="w-full h-full object-cover scale-125 transition-transform ease-out group-hover:scale-105"
             style={{ transitionDuration: "1500ms" }}
             loading="lazy"
           />

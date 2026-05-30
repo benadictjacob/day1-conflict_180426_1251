@@ -83,11 +83,7 @@ export default function Hero() {
 
       </motion.div>
 
-      <div className="absolute top-28 right-6 md:right-12 font-display text-[10px] tracking-[0.3em] uppercase text-foreground/20">
-        <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}>
-          EST. 2026
-        </motion.span>
-      </div>
+      
     </section>
   );
 }
