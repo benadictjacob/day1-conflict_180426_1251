@@ -77,9 +77,6 @@ export default function WhatWeDo() {
           <FadeUp>
             <motion.h2 className="font-display text-5xl md:text-7xl font-bold text-foreground" style={{ x: smoothHeadingX }}>What We Do</motion.h2>
           </FadeUp>
-          <LineReveal delay={0.2}>
-            <p className="font-display text-xs tracking-[0.2em] uppercase text-foreground/40 max-w-xs">Engineering smart solutions that elevate discarded materials into valuable resources.</p>
-          </LineReveal>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-14">
           {items.map((item, index) => (<WhatWeDoCard key={index} item={item} index={index} />))}
