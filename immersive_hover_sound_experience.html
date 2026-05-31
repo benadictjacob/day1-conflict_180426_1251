@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080808;
+    color: #f0ede6;
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+    min-height: 100vh;
+  }
+
+  #cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: #FF4C00;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: exclusion;
+  }
+
+  #cursor-ring {
+    position: fixed;
+    width: 40px; height: 40px;
+    border: 1px solid rgba(255,76,0,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.12s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
+  }
+
+  #cursor.expanded { width: 60px; height: 60px; }
+  #cursor-ring.expanded { width: 80px; height: 80px; border-color: rgba(255,76,0,0.9); }
+
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 8vw;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28vw;
+    color: rgba(255,76,0,0.03);
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: -0.02em;
+    user-select: none;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #FF4C00;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 12vw, 13rem);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    overflow: hidden;
+  }
+
+  .title-line {
+    display: block;
+    overflow: hidden;
+  }
+
+  .title-line span {
+    display: block;
+    transform: translateY(110%);
+    animation: slideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .title-line:nth-child(1) span { animation-delay: 0.5s; }
+  .title-line:nth-child(2) span { animation-delay: 0.65s; }
+  .title-line:nth-child(3) span { animation-delay: 0.8s; }
+
+  .title-line.accent span { color: #FF4C00; }
+
+  @keyframes slideUp {
+    to { transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-sub {
+    max-width: 400px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(240,237,230,0.5);
+    margin-top: 3rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease 1.1s forwards;
+  }
+
+  .sound-btn {
+    position: fixed;
+    top: 2rem; right: 2rem;
+    z-index: 100;
+    background: rgba(240,237,230,0.05);
+    border: 1px solid rgba(240,237,230,0.12);
+    color: #f0ede6;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.2rem;
+    cursor: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 2px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .sound-btn:hover {
+    background: rgba(255,76,0,0.1);
+    border-color: rgba(255,76,0,0.4);
+  }
+
+  .sound-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #888;
+    transition: background 0.3s;
+    flex-shrink: 0;
+  }
+
+  .sound-dot.on { background: #FF4C00; animation: pulse 1.4s ease infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .logo {
+    position: fixed;
+    top: 2rem; left: 2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.1em;
+    z-index: 100;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.2s forwards;
+  }
+
+  .marquee-section {
+    overflow: hidden;
+    border-top: 1px solid rgba(240,237,230,0.06);
+    border-bottom: 1px solid rgba(240,237,230,0.06);
+    padding: 1.2rem 0;
+    background: transparent;
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 3rem;
+    white-space: nowrap;
+    animation: marquee 20s linear infinite;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(240,237,230,0.25);
+  }
+
+  .marquee-track span { color: #FF4C00; }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .works-section {
+    padding: 10vh 8vw;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(240,237,230,0.3);
+    margin-bottom: 5rem;
+  }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .work-card {
+    position: relative;
+    height: 52vh;
+    overflow: hidden;
+    cursor: none;
+    background: #111;
+  }
+
+  .work-card-inner {
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2.5rem;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .work-card-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    transform: scale(1.05);
+    transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .card-bg-1 { background: linear-gradient(135deg, #1a0a05 0%, #3d1500 50%, #0d0d0d 100%); }
+  .card-bg-2 { background: linear-gradient(135deg, #050a1a 0%, #001540 50%, #0d0d0d 100%); }
+  .card-bg-3 { background: linear-gradient(135deg, #050d05 0%, #0d2b00 50%, #0d0d0d 100%); }
+  .card-bg-4 { background: linear-gradient(135deg, #0d050d 0%, #250025 50%, #0d0d0d 100%); }
+
+  .work-card:hover .work-card-bg { transform: scale(1); }
+  .work-card:hover .work-card-inner { transform: translateY(-6px); }
+
+  .card-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    color: rgba(240,237,230,0.25);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.8rem;
+  }
+
+  .card-tag {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(240,237,230,0.35);
+  }
+
+  .card-arrow {
+    position: absolute;
+    top: 2rem; right: 2rem;
+    width: 44px; height: 44px;
+    border: 1px solid rgba(240,237,230,0.12);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 3;
+  }
+
+  .work-card:hover .card-arrow {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .card-arrow svg { width: 16px; height: 16px; stroke: #f0ede6; fill: none; stroke-width: 2; }
+
+  .card-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+
+  .card-glow-1 { background: radial-gradient(ellipse at 50% 80%, rgba(255,76,0,0.18) 0%, transparent 70%); }
+  .card-glow-2 { background: radial-gradient(ellipse at 50% 80%, rgba(0,100,255,0.15) 0%, transparent 70%); }
+  .card-glow-3 { background: radial-gradient(ellipse at 50% 80%, rgba(50,200,50,0.12) 0%, transparent 70%); }
+  .card-glow-4 { background: radial-gradient(ellipse at 50% 80%, rgba(180,0,200,0.14) 0%, transparent 70%); }
+
+  .work-card:hover .card-glow { opacity: 1; }
+
+  .magnetic-zone {
+    display: inline-block;
+    position: relative;
+    padding: 1rem 2.5rem;
+    border: 1px solid rgba(240,237,230,0.15);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4rem;
+    cursor: none;
+    transition: background 0.3s, border-color 0.3s, color 0.3s;
+  }
+
+  .magnetic-zone:hover {
+    background: #FF4C00;
+    border-color: #FF4C00;
+    color: #080808;
+  }
+
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9990;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    animation: grainShift 0.12s steps(1) infinite;
+  }
+
+  @keyframes grainShift {
+    0%  { background-position: 0 0; }
+    20% { background-position: -20px -40px; }
+    40% { background-position: -60px 0px; }
+    60% { background-position: -20px -80px; }
+    80% { background-position: 0px -40px; }
+    100%{ background-position: -80px 0px; }
+  }
+
+  .footer-cta {
+    padding: 15vh 8vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-top: 1px solid rgba(240,237,230,0.06);
+  }
+
+  .footer-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 9vw, 9rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 3rem;
+  }
+
+  .footer-title .accent { color: #FF4C00; }
+
+  .waveform {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    height: 24px;
+  }
+
+  .waveform-bar {
+    width: 3px;
+    background: #FF4C00;
+    border-radius: 2px;
+    animation: waveAnim 0.6s ease infinite alternate;
+    opacity: 0.3;
+    height: 4px;
+    transition: height 0.3s, opacity 0.3s;
+  }
+
+  .waveform.active .waveform-bar { opacity: 1; }
+  .waveform.active .waveform-bar:nth-child(1) { animation-delay: 0s; }
+  .waveform.active .waveform-bar:nth-child(2) { animation-delay: 0.1s; }
+  .waveform.active .waveform-bar:nth-child(3) { animation-delay: 0.2s; }
+  .waveform.active .waveform-bar:nth-child(4) { animation-delay: 0.3s; }
+  .waveform.active .waveform-bar:nth-child(5) { animation-delay: 0.15s; }
+  .waveform.active .waveform-bar:nth-child(6) { animation-delay: 0.05s; }
+  .waveform.active .waveform-bar:nth-child(7) { animation-delay: 0.25s; }
+
+  @keyframes waveAnim {
+    from { height: 4px; }
+    to { height: 20px; }
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 3rem; left: 8vw;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(240,237,230,0.25);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.5s forwards;
+  }
+
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: rgba(240,237,230,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: #FF4C00;
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollLine {
+    0% { left: -100%; }
+    50% { left: 0; }
+    100% { left: 100%; }
+  }
+
+  .hover-text-reveal {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+  }
+
+  .hover-text-reveal .top { display: block; transition: transform 0.4s cubic-bezier(0.76,0,0.24,1); }
+  .hover-text-reveal .bottom {
+    position: absolute;
+    top: 0; left: 0;
+    color: #FF4C00;
+    transform: translateY(110%);
+    transition: transform 0.4s cubic-bezier(0.76,0,0.24,1);
+  }
+
+  .magnetic-zone:hover .hover-text-reveal .top { transform: translateY(-110%); }
+  .magnetic-zone:hover .hover-text-reveal .bottom { transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<div class="logo">IMMERSE</div>
+
+<button class="sound-btn" id="soundBtn" onclick="toggleSound()">
+  <div class="sound-dot" id="soundDot"></div>
+  <div class="waveform" id="waveform">
+    <div class="waveform-bar"></div>
+    <div class="waveform-bar"></div>
+    <div class="waveform-bar"></div>
+    <div class="waveform-bar"></div>
+    <div class="waveform-bar"></div>
+    <div class="waveform-bar"></div>
+    <div class="waveform-bar"></div>
+  </div>
+  <span id="soundLabel">Sound On</span>
+</button>
+
+<section class="hero">
+  <div class="hero-bg-text">FEEL</div>
+  <div class="eyebrow">Est. 2024 — Immersive Experiences</div>
+  <h1 class="hero-title">
+    <span class="title-line"><span>BEYOND</span></span>
+    <span class="title-line accent"><span>REALITY</span></span>
+    <span class="title-line"><span>AWAITS</span></span>
+  </h1>
+  <p class="hero-sub">We craft digital experiences that blur the line between the physical and the imagined. Hover. Listen. Feel.</p>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span>AR</span> Augmented Reality — <span>VR</span> Virtual Reality — <span>3D</span> Real-Time Rendering — <span>XR</span> Extended Reality — Spatial Computing — Immersive Storytelling —
+    <span>AR</span> Augmented Reality — <span>VR</span> Virtual Reality — <span>3D</span> Real-Time Rendering — <span>XR</span> Extended Reality — Spatial Computing — Immersive Storytelling —
+  </div>
+</div>
+
+<section class="works-section">
+  <div class="section-label">Selected Works / 2024</div>
+  <div class="works-grid">
+    <div class="work-card" data-sound="hover1">
+      <div class="work-card-bg card-bg-1"></div>
+      <div class="card-glow card-glow-1"></div>
+      <div class="card-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="work-card-inner">
+        <div class="card-number">001</div>
+        <div class="card-title">EMBER<br>WORLDS</div>
+        <div class="card-tag">AR Installation / Brand</div>
+      </div>
+    </div>
+    <div class="work-card" data-sound="hover2">
+      <div class="work-card-bg card-bg-2"></div>
+      <div class="card-glow card-glow-2"></div>
+      <div class="card-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="work-card-inner">
+        <div class="card-number">002</div>
+        <div class="card-title">DEEP<br>OCEAN</div>
+        <div class="card-tag">VR Experience / Museum</div>
+      </div>
+    </div>
+    <div class="work-card" data-sound="hover3">
+      <div class="work-card-bg card-bg-3"></div>
+      <div class="card-glow card-glow-3"></div>
+      <div class="card-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="work-card-inner">
+        <div class="card-number">003</div>
+        <div class="card-title">GROVE<br>SYSTEM</div>
+        <div class="card-tag">Spatial Computing / Retail</div>
+      </div>
+    </div>
+    <div class="work-card" data-sound="hover4">
+      <div class="work-card-bg card-bg-4"></div>
+      <div class="card-glow card-glow-4"></div>
+      <div class="card-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="work-card-inner">
+        <div class="card-number">004</div>
+        <div class="card-title">NOVA<br>GATE</div>
+        <div class="card-tag">3D Web / Product Launch</div>
+      </div>
+    </div>
+  </div>
+  <div class="magnetic-zone" id="magBtn">
+    <span class="hover-text-reveal">
+      <span class="top">View All Projects</span>
+      <span class="bottom">Explore the Work →</span>
+    </span>
+  </div>
+</section>
+
+<section class="footer-cta">
+  <h2 class="footer-title">LET'S<br>BUILD<br><span class="accent">WORLDS</span></h2>
+  <div class="magnetic-zone" id="ctaBtn">
+    <span class="hover-text-reveal">
+      <span class="top">Start a Project</span>
+      <span class="bottom">Let's Connect →</span>
+    </span>
+  </div>
+</section>
+
+<script>
+let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+let cx = mx, cy = my, rx = mx, ry = my;
+let soundOn = false;
+let audioCtx = null;
+let lastHoverSound = 0;
+
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+
+document.addEventListener('mousemove', (e) => {
+  mx = e.clientX; my = e.clientY;
+});
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function animateCursor() {
+  cx = lerp(cx, mx, 0.18);
+  cy = lerp(cy, my, 0.18);
+  rx = lerp(rx, mx, 0.08);
+  ry = lerp(ry, my, 0.08);
+
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+document.querySelectorAll('.work-card, .magnetic-zone, .sound-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.classList.add('expanded');
+    ring.classList.add('expanded');
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.classList.remove('expanded');
+    ring.classList.remove('expanded');
+  });
+});
+
+function getOrCreateAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTone(freq, type, dur, vol, delay) {
+  try {
+    const ctx = getOrCreateAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(freq, ctx.currentTime + (delay||0));
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.5, ctx.currentTime + (delay||0) + dur);
+    gain.gain.setValueAtTime(vol || 0.06, ctx.currentTime + (delay||0));
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + (delay||0) + dur);
+    osc.start(ctx.currentTime + (delay||0));
+    osc.stop(ctx.currentTime + (delay||0) + dur + 0.05);
+  } catch(e) {}
+}
+
+function playAmbient() {
+  try {
+    const ctx = getOrCreateAudioCtx();
+    const bufSize = ctx.sampleRate * 2;
+    const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1) * 0.02;
+    const source = ctx.createBufferSource();
+    source.buffer = buf;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 300;
+    source.connect(filter);
+    const gain = ctx.createGain();
+    gain.gain.value = 0.3;
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    source.loop = true;
+    source.start();
+    window._ambientSource = source;
+    window._ambientGain = gain;
+  } catch(e) {}
+}
+
+function stopAmbient() {
+  try {
+    if (window._ambientSource) { window._ambientSource.stop(); window._ambientSource = null; }
+  } catch(e) {}
+}
+
+function toggleSound() {
+  soundOn = !soundOn;
+  const dot = document.getElementById('soundDot');
+  const label = document.getElementById('soundLabel');
+  const waveform = document.getElementById('waveform');
+
+  if (soundOn) {
+    dot.classList.add('on');
+    label.textContent = 'Sound On';
+    waveform.classList.add('active');
+    playAmbient();
+    playTone(440, 'sine', 0.4, 0.07);
+    playTone(660, 'sine', 0.3, 0.04, 0.1);
+    playTone(880, 'sine', 0.2, 0.03, 0.2);
+  } else {
+    dot.classList.remove('on');
+    label.textContent = 'Sound Off';
+    waveform.classList.remove('active');
+    stopAmbient();
+    playTone(220, 'sine', 0.3, 0.05);
+  }
+}
+
+document.querySelectorAll('.work-card').forEach((card, i) => {
+  card.addEventListener('mouseenter', () => {
+    const now = Date.now();
+    if (!soundOn || now - lastHoverSound < 200) return;
+    lastHoverSound = now;
+    const freqs = [320, 280, 360, 300];
+    const types = ['triangle', 'sine', 'triangle', 'sine'];
+    playTone(freqs[i], types[i], 0.25, 0.05);
+    playTone(freqs[i] * 1.5, 'sine', 0.15, 0.02, 0.05);
+  });
+});
+
+document.querySelectorAll('.magnetic-zone').forEach(btn => {
+  btn.addEventListener('mouseenter', () => {
+    if (!soundOn) return;
+    const now = Date.now();
+    if (now - lastHoverSound < 150) return;
+    lastHoverSound = now;
+    playTone(500, 'sine', 0.15, 0.04);
+  });
+  btn.addEventListener('click', () => {
+    if (soundOn) {
+      playTone(660, 'triangle', 0.2, 0.06);
+      playTone(880, 'sine', 0.15, 0.04, 0.08);
+    }
+    sendPrompt('I want to customise this immersive experience for my project — let\'s discuss my brand, content, and what interactions I need');
+  });
+});
+
+const magBtn = document.getElementById('magBtn');
+const ctaBtn = document.getElementById('ctaBtn');
+
+[magBtn, ctaBtn].forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const dx = e.clientX - (rect.left + rect.width / 2);
+    const dy = e.clientY - (rect.top + rect.height / 2);
+    btn.style.transform = `translate(${dx * 0.25}px, ${dy * 0.35}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = 'translate(0,0)';
+    btn.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1), background 0.3s, border-color 0.3s, color 0.3s';
+  });
+  btn.addEventListener('mouseenter', () => {
+    btn.style.transition = 'transform 0.1s, background 0.3s, border-color 0.3s, color 0.3s';
+  });
+});
+</script>
+</body>
+</html>
